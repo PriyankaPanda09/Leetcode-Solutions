@@ -1,28 +1,52 @@
+// This is the non optimized code because there are many loops here
 // import java.util.ArrayList;
 // import java.util.List;
 
 class Solution {
-    public void solve(int col, char[][] board, List<List<String>> ans,
-                      int[] leftRow, int[] upperDiagonal, int[] lowerDiagonal, int n) {
+    public boolean isSafe1(int row, int col, char[][] board, int n) {
+        int duprow = row;
+        int dupcol = col;
+
+        // Check upper diagonal on left side
+        while (row >= 0 && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row--;
+            col--;
+        }
+
+        row = duprow;
+        col = dupcol;
+        
+        // Check left side of the current row
+        while (col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            col--;
+        }
+
+        row = duprow;
+        col = dupcol;
+        
+        // Check lower diagonal on left side
+        while (row < n && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row++;
+            col--;
+        }
+
+        return true;
+    }
+
+    public void solve(int col, char[][] board, List<List<String>> ans, int n) {
         if (col == n) {
             ans.add(construct(board));
             return;
         }
 
         for (int row = 0; row < n; row++) {
-            if (leftRow[row] == 0 && lowerDiagonal[row + col] == 0 && upperDiagonal[n - 1 + col - row] == 0) {
-                
+            if (isSafe1(row, col, board, n)) {
                 board[row][col] = 'Q';
-                leftRow[row] = 1;
-                lowerDiagonal[row + col] = 1;
-                upperDiagonal[n - 1 + col - row] = 1;
-                
-                solve(col + 1, board, ans, leftRow, upperDiagonal, lowerDiagonal, n);
-                
+                solve(col + 1, board, ans, n);
                 board[row][col] = '.';
-                leftRow[row] = 0;
-                lowerDiagonal[row + col] = 0;
-                upperDiagonal[n - 1 + col - row] = 0;
             }
         }
     }
@@ -36,11 +60,7 @@ class Solution {
             }
         }
         
-        int[] leftRow = new int[n];
-        int[] upperDiagonal = new int[2 * n - 1];
-        int[] lowerDiagonal = new int[2 * n - 1];
-        
-        solve(0, board, ans, leftRow, upperDiagonal, lowerDiagonal, n);
+        solve(0, board, ans, n);
         return ans;
     }
 
