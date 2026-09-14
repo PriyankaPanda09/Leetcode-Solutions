@@ -1,19 +1,15 @@
+//two pointer approach
 class Solution {
     public int removeDuplicates(int[] nums) {
-        Set<Integer> expectedNums = new TreeSet<>();
-        // here the question demands the result to be sorted in scending order only
-        // but hashSet doesnot gurantee soreted order so we use treeSet which gurantee sorted order.
-        for(int i=0;i<nums.length;i++){
-            expectedNums.add(nums[i]);
+        int i =0;
+        for(int j =1;j<nums.length;j++){
+            if(nums[i]!=nums[j]){
+                nums[i+1] = nums[j];
+                i++;
+            }
         }
-        int k=0;
-        for(int i: expectedNums){
-            nums[k]= i;
-            k++;
-        }
-        return k;
+            return i+1;
+            // tc : O(N);
+            // sc : O(1);
     }
-    // tc : NlogN + N;
-    // sc : N
-    // we can minimize the time complexity by o(N) and sc by o(1) using 2 pointers
 }
