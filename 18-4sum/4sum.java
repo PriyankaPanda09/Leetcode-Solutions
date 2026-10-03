@@ -1,28 +1,39 @@
-/*better approach
------------------
-Time Complexity: O(N³) on average, where N represents the array size.
-
-Space Complexity: O(N + M), where seenValues may store O(N) values and uniqueQuadruplets may store M distinct quadruplets.
-*/
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         int n = nums.length;
+        List<List<Integer>> ans = new ArrayList<>();
         if(n<4) return new ArrayList<>();
-        Set<List<Integer>> uniqueQuad = new HashSet<>();
+        Arrays.sort(nums);
         for(int first = 0;first<n-3;first++){
-           for(int sec =first+1;sec<n-2;sec++) {
-            Set<Long> seenVal = new HashSet<>();
-            for(int third = sec+1;third<n;third++){
-                long fourthVal = (long) target - nums[first] - nums[sec] - nums[third];
-                if(seenVal.contains(fourthVal)){
-                    List<Integer> quadruplet = new ArrayList<>(Arrays.asList(nums[first],nums[sec],nums[third],(int) fourthVal));
-                    Collections.sort(quadruplet);
-                    uniqueQuad.add(quadruplet);
+            if(first>0 && nums[first]==nums[first-1]) continue;
+            for(int sec=first +1;sec<n-2;sec++){
+                if(sec>first+1 && nums[sec]==nums[sec-1]) continue;
+                int left = sec+1;
+                int right= n-1;
+                while(left<right){
+                    long sum = (long) nums[first] + nums[sec] + nums[left] + nums[right];
+                    if(sum<target){
+                        left++;
+                    }
+                    else if(sum>target){
+                        right--;
+                    }
+                    else{
+                        List<Integer> quad = new ArrayList<>(Arrays.asList(nums[first],nums[sec],nums[left],nums[right]));
+                        Collections.sort(quad);
+                        ans.add(quad);
+                        left++;
+                        right--;
+                        while(left<right && nums[left]==nums[left-1]){
+                            left++;
+                        }
+                        while(left<right && nums[right]== nums[right+1]){
+                            right--;
+                        }
+                    }
                 }
-                seenVal.add((long) nums[third]);
             }
-           }
         }
-        return new ArrayList(uniqueQuad);
+        return ans;
     }
 }
