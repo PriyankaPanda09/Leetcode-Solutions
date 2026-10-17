@@ -1,18 +1,13 @@
+// newton's method
+//tc - o(logx)
 class Solution {
     public int mySqrt(int x) {
-        int low = 0;
-        int high = x;
-        int ans = 0;
-        while(low <= high ){
-            int mid = low + (high - low )/2;
-            long square = (long) mid * mid;
-            if (square <= x){
-                ans = mid;
-                low = mid + 1;
-            }else{
-                high = mid -1;
-            }
+        if(x<2) return x;
+        long guess = x ;
+        while ( guess * guess >x){
+            guess = (guess + x/guess)/2;
+
         }
-        return ans;
+        return (int) guess;
     }
 }
