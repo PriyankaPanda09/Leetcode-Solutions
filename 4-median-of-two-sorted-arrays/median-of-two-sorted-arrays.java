@@ -1,40 +1,28 @@
+//Brute Force Approach
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        // Always binary search on the smaller array for O(log(min(m,n)))
-        if (nums1.length > nums2.length) {
-            return findMedianSortedArrays(nums2, nums1);
+        //this stores all the value from both the arrays in one place
+        ArrayList<Integer> merged = new ArrayList<>();
+        
+        for(int val : nums1){
+            merged.add(val);
+        }
+        for(int val : nums2){
+            merged.add(val);
         }
 
-        int m = nums1.length, n = nums2.length;
-        int total = m + n;
-        int half = (total + 1) / 2; // size of left partition (handles odd/even)
+        //sorting creates the final order needed for median calculation
+        Collections.sort(merged);
 
-        int lo = 0, hi = m;
+        //total no. of values after both arrays are combines
+        int total = merged.size();
 
-        while (lo <= hi) {
-            int cut1 = (lo + hi) / 2;      // elements taken from nums1
-            int cut2 = half - cut1;        // elements taken from nums2
-
-            // Values just around the cut points
-            int left1  = (cut1 == 0) ? Integer.MIN_VALUE : nums1[cut1 - 1];
-            int right1 = (cut1 == m) ? Integer.MAX_VALUE : nums1[cut1];
-            int left2  = (cut2 == 0) ? Integer.MIN_VALUE : nums2[cut2 - 1];
-            int right2 = (cut2 == n) ? Integer.MAX_VALUE : nums2[cut2];
-
-            if (left1 <= right2 && left2 <= right1) {
-                // Valid partition found
-                if (total % 2 == 0) {
-                    return (Math.max(left1, left2) + Math.min(right1, right2)) / 2.0;
-                } else {
-                    return Math.max(left1, left2);
-                }
-            } else if (left1 > right2) {
-                hi = cut1 - 1; // took too much from nums1, move left
-            } else {
-                lo = cut1 + 1; // took too little from nums1, move right
-            }
+        //if total is odd, there is exact one middle  element
+        if (total %2 == 1){
+            return merged.get(total/2);
+        }else{
+            // If total is even, the median is the average of the two middle elements.
+            return((double)merged.get(total/2-1)+ merged.get(total/2))/2.0;
         }
-
-        throw new IllegalArgumentException("Input arrays are not sorted");
     }
 }
