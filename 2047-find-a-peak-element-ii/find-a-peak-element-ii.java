@@ -1,46 +1,35 @@
-//Brute Force Approach
 class Solution {
     public int[] findPeakGrid(int[][] mat) {
         int rows = mat.length;
         int cols = mat[0].length;
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                // initialize the top neighbours; defaults to -1 if out of boundart
-                int up = -1;
-                if(i>0){
-                    //current cell is not in the top row, so fetch the upper neighbor
-                    up = mat[i - 1][j];
-                }
+        int low = 0;
+        int high = rows -1 ;
 
-                // Initialize bottom neighbor; defaults to -1 if out of boundary
-                int down = -1;
-                if(i+1 < rows){
-                // Current cell is not in the bottom row, so fetch the lower neighbor
-                    down = mat[i+1][j];
-                }
-                // Initialize left neighbor; defaults to -1 if out of boundary
-                int left = -1;
-                if (j > 0) {
-                    // Current cell is not in the leftmost column, so fetch the left neighbor
-                    left = mat[i][j - 1];
-                }
+        while(low < high){
+            int mid = low + (high-low)/2;
 
-                // Initialize right neighbor; defaults to -1 if out of boundary
-                int right = -1;
-                if (j + 1 < cols) {
-                    // Current cell is not in the rightmost column, so fetch the right neighbor
-                    right = mat[i][j + 1];
-                }
-
-                // Check if current cell is strictly greater than all valid neighbors
-                if (mat[i][j] > up && mat[i][j] > down &&
-                    mat[i][j] > left && mat[i][j] > right) {
-                    // Found a valid peak, return its coordinates immediately
-                    return new int[]{i, j};
+            //stores the index of column of the largest value in the middle row
+            int bestCol = 0;
+            for(int col = 1;col <cols;col++){
+                if(mat[mid][col] > mat[mid][bestCol]){
+                    bestCol = col;
                 }
             }
+            if(mat[mid][bestCol] > mat[mid+1][bestCol]){
+                high = mid;
+            }else{
+                low = mid + 1;
+            }
         }
-         return new int[]{-1, -1};
+
+        //find the largest element again in the final ans row
+        int bestCol = 0;
+        for(int col = 1;col <cols;col++){
+            if(mat[low][col] > mat[low][bestCol]){
+                bestCol = col;
+            }
+        }
+        return new int[]{low,bestCol};
     }
 }
