@@ -1,22 +1,25 @@
-//Brute Force Approach
+//Optimal Approach
 class Solution {
+    // return the index of any valid peak element
     public int findPeakElement(int[] nums) {
-        //a single element is always a peak 
-        if(nums.length == 1) return 0;
-        for (int i =0;i<nums.length;i++){
-            //check if first element using only the right neighbour
-            if(i==0){
-                if(nums[i]>nums[i+1]) return i;
-            }
-            else if(i==nums.length-1){
-                //check the last element using only the left neighbour
-                if(nums[i] > nums[i-1]) return i;
-            }
-            else{
-                // a middle element is a peak only if it is greater than both sides
-                if(nums[i]> nums[i-1] && nums[i]>nums[i+1]) return i;
+        // left boundary of the current search range
+        int low = 0;
+        //right boundary of the current search range
+        int high = nums.length-1;
+
+        //keep shrinking the search range until one peak postion remaining
+        while(low<high){
+            //calculate the middle index safely
+            int mid = low + (high - low)/2;
+
+            // a rising slope means some peak must exist on the r8 side
+            if(nums[mid]<nums[mid+1]){
+                low = mid + 1;
+            }else {
+                // a flling slop means mid or the left side contains a peak
+                high = mid ;
             }
         }
-        return -1;
+        return low;
     }
 }
