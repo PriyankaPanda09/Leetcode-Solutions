@@ -1,21 +1,29 @@
 class Solution {
     public int compress(char[] chars) {
-        StringBuilder result = new StringBuilder();
-        int i =0;
-        while(i<chars.length){
-            char ch = chars[i];
-            int count = 0;
-            while(i<chars.length && chars[i]==ch){
-                count++;i++;
-            }
-            result.append(ch);
-            if(count>1){
-                result.append(count);
+     //optimal solutions using read and write pointer
+     // read - reads each group of identical character
+     //write - writes compress characters into original array
+     int read = 0;
+     int write = 0;
+     int n = chars.length;
+
+     while(read < n)   {
+        char ch = chars[read];
+        int count = 0;
+        while(read < n && chars[read]==ch){
+            read++;
+            count++;
+        }
+        chars[write]= ch;
+        write++;
+        if(count>1){
+            String digit = String.valueOf(count);
+            for(int i =0;i<digit.length();i++){
+                chars[write] = digit.charAt(i);
+                write++;
             }
         }
-        for(int j=0;j<result.length();j++){
-            chars[j] = result.charAt(j);
-        }
-        return result.length();
+     }
+     return write;
     }
 }
