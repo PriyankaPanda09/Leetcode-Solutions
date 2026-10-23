@@ -8,10 +8,10 @@ class Solution {
 
             for (int i = 0; i < size; i++) {
                 List<Integer> newSubset =
-                    new ArrayList<>(result.get(i));
+                    new ArrayList<>(result.get(i));//copy the existing bag 
 
-                newSubset.add(num);
-                result.add(newSubset);
+                newSubset.add(num);//drop the new num inside it
+                result.add(newSubset);//put it back on the table
             }
         }
 
