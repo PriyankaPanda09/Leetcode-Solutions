@@ -1,20 +1,19 @@
-//brute force - store in new array
+//modify same array
 class Solution {
     public int[] sortArrayByParity(int[] nums) {
-        int[] temp = new int[nums.length];
-        int j =0;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]%2 == 0){
-                temp[j] = nums[i];
-                j++;
+        int left= 0;
+        int right= nums.length-1;
+        while(left < right)        {
+            if(nums[left]%2 == 0){
+                left++;
+            }else if(nums[right] %2 !=0){
+                right--;
+            }else{
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
             }
         }
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]%2 != 0){
-                temp[j] = nums[i];
-                j++;
-            }
-        }
-        return temp;
+        return nums;
     }
 }
